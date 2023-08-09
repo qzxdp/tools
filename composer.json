@@ -1,0 +1,49 @@
+{
+  "name": "qzxdp/tools",
+  "description": "全栈工具箱",
+  "type": "project",
+  "keywords": [
+    "aoaostar",
+    "toolbox"
+  ],
+  "homepage": "https://tools.qzxdp.cn",
+  "license": "GPL-3.0-only",
+  "require": {
+    "php": ">=7.1.0",
+    "topthink/framework": "^6.0.0",
+    "topthink/think-orm": "^2.0",
+    "topthink/think-view": "^1.0",
+    "topthink/think-migration": "^3.0",
+    "topthink/think-captcha": "^3.0",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-zip": "*",
+    "ext-pdo": "*",
+    "ext-iconv": "*",
+    "khanamiryan/qrcode-detector-decoder": "1.0.5.2",
+    "yurunsoft/yurun-oauth-login": "~2.0"
+
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^4.2",
+    "topthink/think-trace": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "app\\": "app",
+      "plugin\\": "plugin"
+    },
+    "psr-0": {
+      "": "extend/"
+    }
+  },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "@php think service:discover",
+      "@php think vendor:publish"
+    ]
+  }
+}

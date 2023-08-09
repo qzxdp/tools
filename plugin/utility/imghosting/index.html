@@ -1,0 +1,323 @@
+{extend name="common/plugin_layout" /}
+{block name="title"}{$plugin.title} - {:config_get('title')} - {:config_get('subtitle')}{/block}
+{block name="main"}
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7840601356070628"
+        crossorigin="anonymous"></script>
+<style>
+    .btn-block {
+        white-space: normal;
+    }
+
+    .btn-active {
+        background-color: #1c2b46;
+        color: #fff;
+    }
+</style>
+<div class="container-xl" id="app">
+    <div class="col-sm-12 col-md-10 col-xl-9 center-block">
+        <div class="card card-preview">
+            <div class="card-inner mt-3">
+                <div class="nya-title nk-ibx-action-item progress-rating">
+                    <span class="nk-menu-text font-weight-bold">聚合高速图床</span>
+                </div>
+                <div class="alert alert-warning mb-2"><em class="icon ni ni-info"></em>
+                    每次上传本站都会记录日志，严禁上传色情、侵权等违法违规文件，否则封号处理。
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="input">选择图床接口：</label>
+                    <div class="form-control-wrap">
+                        <div class="custom-control custom-radio mr-3 mt-1" v-for="(item,index) in apitypes"
+                             :key="index">
+                            <input type="radio" class="custom-control-input" v-model="set.apitype" name="set.apitype"
+                                   :id="item.key" :value="item.key">
+                            <label class="custom-control-label" :for="item.key">{{item.title}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress progress-lg mt-2 mb-1">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                         v-bind:style="{ width: progress + '%' }">{{progress}}%
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-center pt-5 pb-5 btn btn-lg btn-block btn-outline-light mb-4 d-block"
+                         id="fileInput">
+                        <div class="preview-icon-wrap"><em class="ni ni-upload"></em></div>
+                        <span>拖拽文件到这里或者点击选择文件</span>
+                        <input type="file" id="file" accept="image/*" multiple="multiple"
+                               style="opacity: 0;position: absolute;cursor: pointer;width: 100%;height: 100%;left: 0;top: 0;"
+                               @change="selectFile">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="btn-group">
+                        <button v-for="v in set.output_types.items" class="btn btn-outline-dark btn-sm"
+                                :class="{'btn-active':set.output_types.current===v.key}"
+                                @click="set.output_types.current=v.key"
+                        >
+                            {{v.title}}
+                        </button>
+                    </div>
+                    <div class="form-control-wrap">
+                        <textarea class="form-control" id="output" v-model="result" rows="8"
+                                  placeholder="这里显示上传的结果"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-sm btn-outline-light" @click="copy"><em class="icon ni ni-copy"></em>点此复制
+                        </button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm btn-outline-light" @click="reset"><em
+                            class="icon ni ni-reload"></em>清空
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-preview">
+            <div class="card-inner">
+                <h6><em class="icon ni ni-info"></em> 工具说明</h6>
+                <div class="accordion-inner">
+                    <p>
+                        欢迎使用“图床”工具！这是一个聚合多种图床的实用工具，帮助您轻松上传、存储和分享图片。以下是使用该工具的详细说明：</p>
+                    <dl>
+                        <dt>为什么需要图床工具呢？</dt>
+                        <dd style="margin-left: 10px">
+                            1、图片分享和发布：在网上分享图片时，图床可以起到类似于云存储的作用，用户将图片上传到图床后，可以通过生成的链接分享图片，而无需将图片直接嵌入到网页或文章中，从而减轻了网页或文章的负担，加快了页面加载速度。
+                        </dd>
+                        <dd style="margin-left: 10px">
+                            2、网页优化：对于博客、网站等，使用图床可以减轻服务器的负担，特别是对于流量较大的网站，使用专门的图床服务可以提高网页的访问速度和稳定性。
+                        </dd>
+                        <dd style="margin-left: 10px">
+                            3、防止盗链：图床服务可以防止其他网站盗用你的图片。通过将图片上传到图床，你可以设置相关的权限，以控制图片的访问权限。
+                        </dd>
+                        <dd style="margin-left: 10px">
+                            4、图片管理：图床通常提供图片管理功能，让用户可以方便地查看、组织和删除已上传的图片。
+                        </dd>
+                        <dd style="margin-left: 10px">
+                            5、节省存储空间：对于个人网站或博客，使用图床可以节省服务器存储空间，因为图片可以存储在专门的图床服务器上，而不需要占用你的服务器空间。
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>支持的图片格式和大小限制：</dt>
+                        <dd style="margin-left:10px;">
+                            1、单张图片大小限制：图片大小不能超过10MB。
+                        </dd>
+                        <dd style="margin-left:10px;">
+                            2、支持的图片格式：jpg, jpeg, png, gif, webp。
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>图片上传和处理：</dt>
+                        <dd style="margin-left:10px;">
+                            1、通过打开“图床”工具，您可以看到一个简单直观的界面。
+                        </dd>
+                        <dd style="margin-left:10px;">
+                            2、拖拽或者选择您要上传的图片文件，并等待上传完成。
+                        </dd>
+                        <dd style="margin-left:10px;">
+                            3、上传成功后，您将获得该图片的各种格式的URL链接和HTML、BBcode、Markdown以及Markdown&Link格式的文件链接。
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>分享图片：</dt>
+                        <dd style="margin-left:10px;">
+                            1、使用生成的图片链接可以在社交媒体、论坛、博客等平台上分享图片，让更多人欣赏您的作品或内容。
+                        </dd>
+                        <dd style="margin-left:10px;">
+                            2、若使用Markdown或BBcode格式，可以直接在相应的文本编辑器中粘贴图片链接，实现图片的嵌入。
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>图床链接格式说明：</dt>
+                        <dd style="margin-left: 10px">
+                            1、URL：URL链接是Uniform Resource
+                            Locator的缩写，用于在互联网上标识和定位资源，例如网页、图片、视频等。URL链接是一个包含特定协议（例如HTTP、HTTPS、FTP等）、域名或IP地址、端口号（可选）、路径和查询参数的字符串，用于指示资源在网络上的位置。
+                        </dd>
+                        <dd style="margin-left: 10px">
+                            2、HTML：HyperText Markup Language（超文本标记语言）是用于创建和表示网页的标记语言。在HTML中，可以使用`a`标签来创建链接。
+                        </dd>
+                        <dd style="margin-left: 10px">
+                            3、BBcode：Bulletin Board Code是一种用于在论坛和类似社区平台上格式化帖子的标记语言。
+                        </dd>
+                        <dd style="margin-left: 10px">
+                            4、Markdown：Markdown是一种轻量级标记语言，适用于纯文本环境，常用于写作、文档编写等。
+                        </dd>
+                        <dd style="margin-left: 10px">
+                            5、Markdown&Link格式：有些平台或编辑器支持一种结合Markdown和HTML标记的混合格式，通常称为Markdown&Link格式。在这种格式中，可以直接插入HTML标记来创建链接。
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>注意事项：</dt>
+                        <dd style="margin-left:10px;">
+                            如果发现图床不可用，您可以通过<a href="/comment">留言</a>的方式通知站长，我们会及时修复，感谢！
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script src="{$cdn_cdnjs}vue/2.6.14/vue.min.js"></script>
+<script src="{$cdn_cdnjs}jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            apitypes: [
+                {
+                    title: 'OPPO',
+                    key: 'oppo'
+                },
+                {
+                    title: 'VIPKID',
+                    key: 'vipkid'
+                },
+                {
+                    title: 'XiaoKeFu',
+                    key: 'xiaokefu'
+                },
+                {
+                    title: 'YiDianZiXun',
+                    key: 'yidianzixun'
+                },
+            ],
+            set: {
+                output_types: {
+                    current: 'URL',
+                    items: [
+                        {
+                            title: 'URL',
+                            key: 'URL',
+                            template: '#url#',
+                        },
+                        {
+                            title: 'HTML',
+                            key: 'HTML',
+                            template: '<img src="#url#"/>',
+                        },
+                        {
+                            title: 'BBCode',
+                            key: 'BBCode',
+                            template: '[img]#url#[/img]',
+                        },
+                        {
+                            title: 'Markdown',
+                            key: 'Markdown',
+                            template: '![](#url#)',
+                        },
+                        {
+                            title: 'Markdown&Link',
+                            key: 'MarkdownWithLink',
+                            template: '[![](#url#)](#url#)',
+                        },
+                    ]
+                },
+                output: [],
+                apitype: 'oppo',
+            },
+            progress: 0,
+            urls: {},
+            result: '',
+        },
+        mounted() {
+            if ($.cookie('imghosting_apitype')) {
+                this.set.apitype = $.cookie('imghosting_apitype')
+            }
+        },
+        watch: {
+            'set.apitype'(newVal) {
+                $.cookie('imghosting_apitype', newVal)
+            },
+            'set.output'(newVal) {
+                let list = {}
+                for (item of this.set.output_types.items) {
+                    let arr = []
+                    for (const v of newVal) {
+                        arr.push(item.template.replaceAll('#url#', v))
+                    }
+                    list[item.key] = arr;
+                }
+                this.urls = list
+            },
+            'urls'(newVal) {
+                this.result = newVal[this.set.output_types.current].join('\n')
+            },
+            'set.output_types.current'(newVal) {
+                this.result = this.urls[newVal] ? this.urls[newVal].join('\n') : '';
+            }
+        },
+        methods: {
+            async uploadFile(file, total, id) {
+                var that = this;
+                return new Promise((resolve, reject) => {
+                    if (file.size > 10485760) {
+                        reject('上传失败！文件超过10M');
+                        return;
+                    }
+                    var data = new FormData();
+                    data.append('file', file);
+                    data.append('apitype', that.set.apitype);
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/{$plugin.alias}/upload",
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.code == 0) {
+                                resolve(data.data.url);
+                            } else {
+                                reject(data.msg);
+                            }
+                        },
+                        error: function () {
+                            reject('上传失败！接口错误');
+                        },
+                        xhr: function () {
+                            var xhr = new XMLHttpRequest();
+                            xhr.upload.addEventListener('progress', function (e) {
+                                //console.log(e);
+                                progressRate = Math.round(e.loaded / e.total / total * 100 + (id - 1) / total * 100);
+                                that.progress = progressRate;
+                            })
+                            return xhr;
+                        }
+                    });
+                })
+            },
+            async selectFile(e) {
+                var total = e.target.files.length;
+                if (total == 0) return;
+                this.progress = 0;
+                let loading = layer.msg('正在上传中', {icon: 16, shade: 0.1, time: 0});
+                var error = '';
+                var i = 1;
+                for (const file of e.target.files) {
+                    await this.uploadFile(file, total, i++).then(res => {
+                        this.set.output.push(res)
+                    }, res => {
+                        error += res + "<br/>";
+                    })
+                }
+                $("#file").val('');
+                layer.close(loading);
+                if (error) {
+                    layer.alert(error, {icon: 2});
+                }
+            },
+            copy() {
+                if (!this.result) return;
+                $("#output").select();
+                document.execCommand("Copy");
+                layer.msg('复制成功', {icon: 1, time: 600})
+            },
+            reset() {
+                this.set.output = [];
+                this.progress = 0;
+            }
+        },
+    })
+</script>
+{/block}

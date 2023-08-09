@@ -1,0 +1,104 @@
+{extend name="common/plugin_layout" /}
+{block name="title"}{$plugin.title} - {:config_get('title')} - {:config_get('subtitle')}{/block}
+{block name="head"}
+<link rel="stylesheet" href="{$cdn_npm}codemirror@5.65.0/lib/codemirror.css">
+<link rel="stylesheet" href="{$cdn_npm}codemirror@5.65.0/theme/mdn-like.css">
+<script src="{$cdn_npm}codemirror@5.65.0/lib/codemirror.js"></script>
+<script src="{$cdn_npm}js-beautify@1.14.0/js/lib/beautifier.min.js"></script>
+<script src="{$cdn_npm}csso@5.0.2/dist/csso.js"></script>
+<script src="{$cdn_npm}codemirror@5.65.0/mode/css/css.js"></script>
+{/block}
+{block name="main"}
+<div class="container-xl">
+    <div class="card card-preview">
+        <div class="card-inner mt-3">
+            <div class="nya-title nk-ibx-action-item progress-rating">
+                <span class="nk-menu-text font-weight-bold">CSS 格式化/压缩</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">代码：</label>
+                <div class="form-control-wrap">
+                    <textarea id="code" class="textarea textarea-bordered "></textarea>
+                </div>
+            </div>
+        
+            <button class="btn btn-dim btn-outline-secondary card-link" onclick="format()">
+                格式化
+            </button>
+            <button class="btn btn-dim btn-outline-secondary card-link" onclick="compress()">
+                压缩
+            </button>
+            <button class="btn btn-dim btn-outline-secondary card-link" onclick="copyCss()">
+                复制
+            </button>
+            <button class="btn btn-dim btn-outline-secondary card-link" onclick="reset()">
+                <em class="icon ni ni-reload"></em>
+                清空
+            </button>
+        </div>
+    </div>
+    <div class="card card-preview">
+        <div class="card-inner">
+            <h6><em class="icon ni ni-info"></em> 简介</h6>
+            <p>欢迎使用我们的在线CSS格式化/压缩工具！我们为您提供了一个便捷的CSS代码处理工具，旨在优化您的网页在搜索引擎中的排名，提升网页性能和用户体验。</p>
+            <dl>
+                <dt>为什么要做这个工具？：</dt>
+                <dd style="margin-left: 10px">
+                    在当今互联网时代，网页性能对搜索引擎优化至关重要。优雅的CSS代码可以提高网页质量和可读性，而压缩代码则有助于减小文件体积，提高网页加载速度。为了简化您的开发流程和优化SEO表现，我们开发了这个高效的工具，以满足您对CSS代码处理的各种需求。
+                </dd>
+            </dl>
+            <dl>
+                <dt>工具的作用：</dt>
+                <dd style="margin-left: 10px">1、格式化：通过代码格式化，我们助您生成具有良好缩进、对齐和换行的CSS代码，让代码更易读，同时提高搜索引擎对网页可读性的认知，有助于网页在搜索结果中的排名。</dd>
+                <dd style="margin-left: 10px">2、压缩：通过代码压缩，我们能够去除CSS代码中的不必要空格、注释和换行，从而减小文件体积，加快网页加载速度。优化网页加载速度是SEO优化的重要因素之一，有助于提高用户体验和搜索引擎对网页的评价。</dd>
+            </dl>
+            <dl>
+                <dt>使用场景：</dt>
+                <dd style="margin-left: 10px">1、开发阶段：在代码开发过程中，使用格式化功能，有助于保持CSS代码的规范性和可读性，更易于团队协作和代码审查。</dd>
+                <dd style="margin-left: 10px">2、发布准备：准备发布网页前，可以使用压缩功能，优化网页性能，提升搜索引擎排名，并改善用户在浏览器中的加载体验。</dd>
+                <dd style="margin-left: 10px">3、网页优化：当您希望提高网页加载速度、减少带宽消耗时，可以使用压缩功能对CSS代码进行优化。</dd>
+            </dl>
+            <p>我们相信，优化了CSS代码后，您的网页将获得更好的搜索引擎曝光和更多的有机流量。欢迎开始使用我们的CSS格式化/压缩工具，体验高效开发的同时，为您的网页提供强劲的SEO优化支持，让您的网页在竞争激烈的网络世界中脱颖而出！</p>
+            <p>如果发现工具不满足您的需求，可以通过<a href="/comment">留言</a>的方式通知站长，我们会及时增加，感谢！</p>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+var defaultvalue = `body {
+    border: 1px solid #eee;
+    height: 100%;
+    color: #fff;
+    /*background-color: skyblue;*/
+}`;
+$("#code").html(defaultvalue);
+var initcodemirror = CodeMirror.fromTextArea(document.getElementById("code"), {  // 标识到textarea
+    value: defaultvalue,  // 文本域默认显示的文本
+    mode: {name: "css"},  // 模式
+    theme: "mdn-like",  // CSS样式选择
+    indentUnit: 2,  // 缩进单位，默认2
+    smartIndent: true,  // 是否智能缩进
+    tabSize: 4,  // Tab缩进，默认4
+    readOnly: false,  // 是否只读，默认false
+    showCursorWhenSelecting: true,
+    lineNumbers: true,  // 是否显示行号
+    lineWrapping: true,
+    matchBrackets: true,
+});
+function format() {
+    initcodemirror.setValue(beautifier.css(initcodemirror.getValue()));
+}
+function compress() {
+    initcodemirror.setValue(csso.minify(initcodemirror.getValue()).css);
+}
+function reset() {
+    $("#code").val('');
+    initcodemirror.setValue('');
+}
+function copyCss(){
+    copy(initcodemirror.getValue());
+    layer.msg('复制成功', {icon:1, time:600})
+}
+</script>
+{/block}

@@ -1,0 +1,166 @@
+{extend name="common/plugin_layout" /}
+{block name="title"}{$plugin.title} - {:config_get('title')} - {:config_get('subtitle')}{/block}
+{block name="main"}
+<link rel="stylesheet" href="{$cdn_cdnjs}highlight.js/11.4.0/styles/github-dark-dimmed.min.css">
+<style>
+h1,h2,h3,h4,h5,h6{font-weight:bolder}h1{font-size:2em;margin:.67em 0}h2{font-size:1.5em;margin:.75em 0}h3{font-size:1.17em;margin:.83em 0}h4{margin:1.12em 0}h5{font-size:.83em;margin:1.5em 0}h6{font-size:.75em;margin:1.67em 0}.alert-container{margin:1em 1.6em .3em;overflow:auto;font-size:1.125em;line-height:normal;word-wrap:break-word;word-break:break-word}
+</style>
+<div class="container-xl" id="app">
+<div class="col-sm-12 col-md-10 col-xl-8 center-block">
+    <div class="card card-preview">
+        <div class="card-inner mt-3">
+            <div class="nya-title nk-ibx-action-item progress-rating">
+                <span class="nk-menu-text font-weight-bold">Linux命令查询</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="command">command</label>
+                <div class="form-control-wrap">
+                    <input v-model="set.input" id="command" type="text" placeholder="alias" class="form-control form-control-lg" autocomplete="off">
+                </div>
+            </div>
+            <div class="overflow-auto mt-4" v-show="set.input">
+                <div class="font-bold">搜索结果（点击查看详情）</div>
+                <table class="table mt-4 table-hover">
+                    <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="item in set.output" @click="preview(item)" role="button">
+                        <td>{{commands[item].n}}</td>
+                        <td>{{commands[item].d}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card card-preview">
+        <div class="card-inner">
+            <h6 style="font-size: 1.05rem;margin-bottom: 0.5rem;margin-top: 0rem;"><em class="icon ni ni-info"></em> 简介</h6>
+            <p>当涉足Linux世界时，您不再需要猜测和搜索各种命令。
+                欢迎使用我们全新开发的Linux命令查询工具！该工具为您提供了一种便捷、高效的方式，通过输入关键字，您可以轻松搜索所需的命令信息。
+                不再为命令的定义、用法、选项、实例和注意点而烦恼，一键点击即可获取全面详尽的命令解释。
+            </p>
+            <dl>
+                <dt>常用命令：</dt>
+                <dd style="margin-left: 10px">
+                    1、`sed`：sed（Stream Editor）是一种流编辑器，它在处理文本时基于一系列的编辑命令来进行操作。它可以用于搜索、替换、删除和插入文本等操作，对于文本处理非常有用。
+                </dd>
+                <dd style="margin-left: 10px">
+                    2、`grep`：grep是一种强大的文本搜索工具，用于在文件中查找特定的模式。它可以根据正则表达式搜索文本，并返回匹配的行。
+                </dd>
+                <dd style="margin-left:10px;">
+                    3、`awk`：awk是一种强大的文本处理工具，用于从文本文件中提取数据、处理数据和生成报表。它是一种完整的编程语言，支持循环、条件语句等操作。
+                </dd>
+                <dd style="margin-left:10px;">
+                    4、`chmod`：chmod（Change Mode）命令用于更改文件或目录的权限。它可以控制用户、组和其他用户对文件的读、写和执行权限。
+                </dd>
+                <dd style="margin-left:10px;">
+                    5、`ps`：ps（Process Status）命令用于显示当前系统中正在运行的进程的状态。它可以显示进程的PID（进程ID）、资源使用情况和进程状态等信息。
+                </dd>
+                <dd style="margin-left:10px;">
+                    6、`top`：top是一种交互式实时监视工具，用于显示系统中正在运行的进程和系统资源的使用情况。它能够动态更新显示，帮助用户实时了解系统的性能状况。
+                </dd>
+            </dl>
+            <p>
+                我们致力于为Linux爱好者、开发者和系统管理员提供最佳的使用体验。
+                无论您是初学者还是经验丰富的专家，我们的命令查询工具都将成为您不可或缺的助手。
+                借助优化的搜索引擎，我们将为您呈现最相关、实用的结果，让您事半功倍。
+            </p>
+            <p>
+                不仅如此，为了让您快速掌握所需信息，我们还提供了详细的实例和注意事项，帮助您在使用命令时避免常见错误和困扰。
+                无论您是在寻求基础命令，还是深入了解高级选项，我们都能满足您的需求。
+            </p>
+            <p>
+                使用我们的Linux命令查询工具，让Linux命令变得简单、高效！不再费时费力地搜寻资料，一切尽在您的指尖。
+                开始您的Linux之旅，尽情探索，畅享Linux世界的无限可能吧！</p>
+            <p>如果发现工具不满足您的需求，可以通过<a href="/comment">留言</a>的方式通知站长，我们会及时增加，感谢！</p>
+        </div>
+    </div>
+</div>
+</div>
+{/block}
+{block name="script"}
+<script src="{$cdn_cdnjs}vue/2.6.14/vue.min.js"></script>
+<script src="{$cdn_npm}markdown-it@12.3.2/dist/markdown-it.min.js"></script>
+<script src="{$cdn_cdnjs}highlight.js/11.4.0/highlight.min.js"></script>
+<script>
+var md = window.markdownit({
+    highlight: function (str, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+            try {
+                return '<pre class="hljs p-4"><code>' +
+                    hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
+                    '</code></pre>';
+            } catch (__) {}
+        }
+        return '<pre class="hljs p-4"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+    },
+    typographer: true,
+    html: true,
+});
+new Vue({
+    el: '#app',
+    data: {
+        commands: {},
+        set: {
+            input: '',
+            output: [],
+        }
+    },
+    mounted() {
+        this.getData()
+    },
+    watch: {
+        'set.input'() {
+
+            this.set.output = Object.keys(this.commands).filter(command => {
+                return (
+                    this.commands[command].n.toString().toLowerCase().indexOf(this.set.input.toLowerCase()) >= 0
+                )
+            })
+        }
+    },
+    methods: {
+        getData() {
+            var ii = layer.load();
+            var that = this;
+            request('{$cdn_npm}linux-command/dist/data.json', {}, {
+                type: 'GET',
+                cache: true
+            }).then(data => {
+                layer.close(ii);
+                that.commands = data
+            },() => {
+                layer.close(ii);
+                layer.msg('服务器错误', {icon: 5});
+            })
+        },
+        preview(command) {
+            var ii = layer.load();
+            request(`{$cdn_npm}linux-command/command/${command}.md`, {}, {
+                type: 'GET',
+                dataType:'html',
+                cache: true
+            }).then(data => {
+                layer.close(ii);
+                let result = md.render(data);
+                layer.open({
+                    type: 1,
+                    area: ["100%","100%"],
+                    title: command,
+                    skin: 'layui-layer-rim',
+                    content: `<div class="alert-container">${result}</div>`
+                })
+            },() => {
+                layer.close(ii);
+                layer.msg('服务器错误', {icon: 5});
+            })
+        }
+    },
+})
+</script>
+{/block}

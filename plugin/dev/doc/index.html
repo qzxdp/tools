@@ -1,0 +1,91 @@
+{extend name="common/plugin_layout" /}
+{block name="title"}{$plugin.title} - {:config_get('title')} - {:config_get('subtitle')}{/block}
+{block name="main"}
+<div class="container-xl" id="app">
+    <div class="col-sm-12 col-md-10 col-xl-10 center-block">
+        <div class="card card-preview">
+            <div class="card-inner mt-3">
+                <div class="nya-title nk-ibx-action-item progress-rating">
+                    <span class="nk-menu-text font-weight-bold">文档导航</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-title">
+                        <th style="text-align: center">文档列表</th>
+                        </thead>
+                        <tbody id="table_body">
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/jdk/11" target="_blank">Java11英文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/jdk/17/zh" target="_blank">Java17中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/jdk/17/en" target="_blank">Java17英文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/gradle/8.1.1" target="_blank">Gradle中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-redis.html" target="_blank">Spring-Data-Redis中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-boot.html" target="_blank">Spring-Boot中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-cassandra.html" target="_blank">Spring-Data-Cassandra中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-neo4j.html" target="_blank">Spring-Data-Neo4j中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-mongodb.html" target="_blank">Spring-Data-Mongodb中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-ldap.html" target="_blank">Spring-Data-Ldap中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-couchbase.html" target="_blank">Spring-Data-Couchbase中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-rest.html" target="_blank">Spring-Data-Rest中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-solr.html" target="_blank">Spring-Data-Solr中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-geode.html" target="_blank">Spring-Data-Geode中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-r2dbc.html" target="_blank">Spring-Data-R2dbc中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-jpa.html" target="_blank">Spring-Data-Jpa中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-elasticsearch.html" target="_blank">Spring-Data-Elasticsearch中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-jdbc.html" target="_blank">Spring-Data-Jdbc中文文档</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="https://doc.qzxdp.cn/spring/spring-data-envers.html" target="_blank">Spring-Data-Envers中文文档</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card card-preview">
+            <div class="card-inner">
+                <h6><em class="icon ni ni-info"></em> 简介</h6>
+                <div class="accordion-inner">
+                    <p>文档导航旨在为开发者提供一个方便快捷的中文文档索引，都是根据网友留言后翻译整理的中文文档资源，目前已有Java 17中文文档、Java 20 中文文档、Spring Boot中文文档等。无论您是初学者还是经验丰富的开发者，我们都希望这个导航能为您提供所需的支持和帮助。</p>
+                    <p>无论您是寻找特定语言的官方文档、教程、API参考还是社区资源，我们都希望这个网页导航能成为您在编程学习和开发过程中的得力助手。感谢您的使用！</p>
+                    <p>如果您要需要的文档没有在列表中，可以<a href="/comment">留言</a>给我们，我们会评估后尽快补上。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
